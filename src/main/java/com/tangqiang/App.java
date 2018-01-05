@@ -23,6 +23,7 @@ public class App {
         try {
             App th = new App();
             th.start();
+            // th.jumpFind("target/tmp/Screen_20180105205617.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,7 +53,7 @@ public class App {
             Scanner scanner = new Scanner(System.in);
             while (true) {
                 /**等待跳跃完成 */
-                Thread.sleep(1300);
+                Thread.sleep(1000);
 
                 long start = System.currentTimeMillis();
                 String imagePath = "target/tmp/Screen_" + new DateTime().toString("yyyyMMddHHmmss") + ".png";
@@ -60,32 +61,29 @@ public class App {
                 boolean snapshot = device.takeSnapshot(imagePath);
                 long end1 = System.currentTimeMillis();
 
-                logger.info("Snapshot get , time:" + (end1 - start) + "/ms");
+                logger.info("Snapshot get :" + imagePath + "   used time:" + (end1 - start) + "/ms");
                 BufferedImage bufferedImage = ImageIO.read(new File(imagePath));
+
                 Point center = JumpUtil.getCenter(bufferedImage);
 
-                Point next = JumpUtil.findNext(bufferedImage);
-                logger.info("Find next point:" + next);
-                Point previous = JumpUtil.findPrevious(bufferedImage, next);
-                logger.info("Find previous point:" + previous);
+                Point current = JumpUtil.findCurrent(bufferedImage);
+                Point next = JumpUtil.findNext(bufferedImage, current);
+                long ctime = JumpUtil.time(current, next, bufferedImage.getWidth());
 
                 long end2 = System.currentTimeMillis();
-                logger.info("Find next:" + next + "  previous:" + previous + "  time:" + (end2 - end1) + "/ms");
+                logger.info("Find (" + (end2 - end1) + "ms) next:" + next + "  previous:" + current + "  len:" + Math.abs(next.getX() - current.getX()) + "  Time:" + ctime);
 
-                long ctime = JumpUtil.time(previous, next,bufferedImage.getWidth());
-                logger.info("wait for time , len:" + Math.abs(next.getX() - previous.getX()) + "  Time:" + ctime);
 
                 /**读取输入的时间*/
-                String line = scanner.nextLine();
-                if (line.startsWith("q")) {
-                    break;
-                } else {
-                    int time = Integer.valueOf(line.trim());
-
-                    int randomX = (int)(400 * Math.random() - 200);
-                    int randomY = (int)(80 * Math.random() - 40);
-                    device.touch(center.getX() + randomX, center.getY() - 300 + randomY, time);
-                }
+//                String line = scanner.nextLine();
+//                if (line.startsWith("q")) {
+//                    break;
+//                } else {
+//                    ctime = Integer.valueOf(line.trim());
+//                }
+                int randomX = (int) (40 * Math.random() + 200);
+                int randomY = (int) (80 * Math.random() - 40);
+                device.touch(center.getX() + randomX, center.getY() * 2 - 400 + randomY, ctime);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,10 +93,8 @@ public class App {
 
     private void jumpFind(String path) throws Exception {
         BufferedImage bufferedImage = ImageIO.read(new File(path));
-        Point next = JumpUtil.findNext(bufferedImage);
-        logger.info("Find next point:" + next);
-        Point previous = JumpUtil.findPrevious(bufferedImage, next);
-        logger.info("Find previous point:" + previous);
+        Point current = JumpUtil.findCurrent(bufferedImage);
+        Point next = JumpUtil.findNext(bufferedImage, current);
     }
 
 

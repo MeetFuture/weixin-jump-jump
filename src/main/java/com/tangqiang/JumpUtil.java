@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 /**
  * 工具类
@@ -24,13 +25,33 @@ public class JumpUtil {
     /**
      * 保龄球 特征颜色
      */
-    private static int color_red = 52;
-    private static int color_green = 53;
-    private static int color_blue = 59;
+    private static int[] color = new int[]{-13421504, -13421246, -13486517, -13224109, -12633773, -12043429, -11780511, -11583384, -11451540, -11385743};
     /**
      * 时间距离比
      */
     private static double timeSizePercent = 1.6 / 1080;
+
+
+    /**
+     * 找到跳台位置
+     */
+    public static Point findCurrent(BufferedImage bufferedImage) {
+        int width = bufferedImage.getWidth();
+        int height = bufferedImage.getHeight();
+
+        int scorePos = (int) (height * scorePercent);
+
+        for (int h = scorePos; h < height; h++) {
+            for (int w = 0; w < width - 2; w++) {
+                int rgb = bufferedImage.getRGB(w, h);
+                if (Arrays.binarySearch(color, rgb) >= 0) {
+                    logger.info("Current x:" + w + " y:" + h);
+                    return new Point(w , h);
+                }
+            }
+        }
+        throw new RuntimeException("Not Found Current");
+    }
 
     public static Point getCenter(BufferedImage bufferedImage) {
         int width = bufferedImage.getWidth();
@@ -38,24 +59,39 @@ public class JumpUtil {
         return new Point(width / 2, height / 2);
     }
 
+    private static int arrayHas(int[] arr, int data) {
+        for (int i : arr) {
+            if (i == data) {
+                return 1;
+            }
+        }
+        return -1;
+    }
+
     /**
      * 找到下个图形
      */
-    public static Point findNext(BufferedImage bufferedImage) throws Exception {
+    public static Point findNext(BufferedImage bufferedImage, Point current) throws Exception {
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
         int heightCenter = height / 2;
         int scorePos = (int) (height * scorePercent);
 
-        logger.info("width:" + width + "  height:" + height + "  scorePos:" + scorePos + "  Center:" + heightCenter);
-        for (int h = scorePos; h < heightCenter; h++) {
+        int widthCenter = width / 2;
+        int currentX = current.getX();
+        Rect rect = currentX > widthCenter ? new Rect(0, scorePos, widthCenter, heightCenter) : new Rect(widthCenter, scorePos, width, heightCenter);
+
+
+        //logger.info("width:" + width + "  height:" + height + "  scorePos:" + scorePos + "  Center:" + heightCenter);
+        for (int h = rect.top; h < rect.bottom; h++) {
             int rgbLine = bufferedImage.getRGB(2, h);
             int lineR = (rgbLine >> 16) & 0xFF;
             int lineG = (rgbLine >> 8) & 0xFF;
             int lineB = (rgbLine >> 0) & 0xFF;
 
-            for (int w = 5; w < width - 5; w++) {
+            for (int w = rect.left + 5; w < rect.right - 7; w++) {
                 int rgb = bufferedImage.getRGB(w, h);
+
                 int red = (rgb >> 16) & 0xFF;
                 int green = (rgb >> 8) & 0xFF;
                 int blue = (rgb >> 0) & 0xFF;
@@ -68,41 +104,13 @@ public class JumpUtil {
         throw new RuntimeException("Not Found Next");
     }
 
-    /**
-     * 找到跳台位置
-     */
-    public static Point findPrevious(BufferedImage bufferedImage, Point next) {
-        int width = bufferedImage.getWidth();
-        int height = bufferedImage.getHeight();
-
-        int widthCenter = width / 2;
-        int nextY = next.getY();
-        int nextX = next.getX();
-        Rect rect = nextX > widthCenter ? new Rect(0, nextY, widthCenter, height) : new Rect(widthCenter, nextY, width, height);
-
-        for (int h = rect.top; h < rect.bottom; h++) {
-            for (int w = rect.left; w < rect.right; w++) {
-                int rgb = bufferedImage.getRGB(w, h);
-
-                int red = (rgb >> 16) & 0xFF;
-                int green = (rgb >> 8) & 0xFF;
-                int blue = (rgb >> 0) & 0xFF;
-                if (red > color_red - 2 && red < color_red + 2) {
-                    logger.info(w + " " + h + " r:" + red + " g:" + green + " b:" + blue);
-                    return new Point(w + 3, h);
-                }
-            }
-        }
-        throw new RuntimeException("Not Found Previous");
-    }
-
 
     /**
      * 计算时间
      */
     public static long time(Point previous, Point next, int width) {
         double time = (double) Math.abs(next.getX() - previous.getX()) * (double) width * timeSizePercent;
-        return (long)time;
+        return (long) time;
     }
 
 }
