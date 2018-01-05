@@ -53,7 +53,7 @@ public class App {
             Scanner scanner = new Scanner(System.in);
             while (true) {
                 /**等待跳跃完成 */
-                Thread.sleep(1000);
+                Thread.sleep(1200);
 
                 long start = System.currentTimeMillis();
                 String imagePath = "target/tmp/Screen_" + new DateTime().toString("yyyyMMddHHmmss") + ".png";
