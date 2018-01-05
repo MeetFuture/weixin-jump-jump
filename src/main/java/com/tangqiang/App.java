@@ -23,7 +23,7 @@ public class App {
         try {
             App th = new App();
             th.start();
-            // th.jumpFind("target/tmp/Screen_20180105205617.png");
+            // th.jumpFind("tmp/Screen_20180105205617.png");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -42,13 +42,12 @@ public class App {
         device.dispose();
         backend.shutdown();
 
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         System.exit(0);
     }
 
 
     private void jump(IAdbDevice device) {
-        logger.info("jumpGo ..... ");
         try {
             Scanner scanner = new Scanner(System.in);
             while (true) {
@@ -56,7 +55,7 @@ public class App {
                 Thread.sleep(1200);
 
                 long start = System.currentTimeMillis();
-                String imagePath = "target/tmp/Screen_" + new DateTime().toString("yyyyMMddHHmmss") + ".png";
+                String imagePath = "tmp/Screen_" + new DateTime().toString("yyyyMMddHHmmss") + ".png";
 
                 boolean snapshot = device.takeSnapshot(imagePath);
                 long end1 = System.currentTimeMillis();
