@@ -72,8 +72,8 @@ public class App {
                 long end2 = System.currentTimeMillis();
                 logger.info("Find next:" + next + "  previous:" + previous + "  time:" + (end2 - end1) + "/ms");
 
-                double ctime = JumpUtil.time(previous, next);
-                logger.info("wait for time , len:" + Math.abs(next.getX() - previous.getX()) + "  ctime:" + ctime);
+                long ctime = JumpUtil.time(previous, next,bufferedImage.getWidth());
+                logger.info("wait for time , len:" + Math.abs(next.getX() - previous.getX()) + "  Time:" + ctime);
 
                 /**读取输入的时间*/
                 String line = scanner.nextLine();

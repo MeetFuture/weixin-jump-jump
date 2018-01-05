@@ -30,7 +30,7 @@ public class JumpUtil {
     /**
      * 时间距离比
      */
-    private static double timeSize = 1.6;
+    private static double timeSizePercent = 1.6 / 1080;
 
     public static Point getCenter(BufferedImage bufferedImage) {
         int width = bufferedImage.getWidth();
@@ -100,10 +100,9 @@ public class JumpUtil {
     /**
      * 计算时间
      */
-    public static double time(Point previous, Point next) {
-        double time = Math.abs(next.getX() - previous.getX()) * 1.6;
-        return time;
+    public static long time(Point previous, Point next, int width) {
+        double time = (double) Math.abs(next.getX() - previous.getX()) * (double) width * timeSizePercent;
+        return (long)time;
     }
-
 
 }
