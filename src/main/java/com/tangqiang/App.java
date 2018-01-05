@@ -39,6 +39,7 @@ public class App {
         jump(device);
 
         device.dispose();
+        backend.shutdown();
 
         Thread.sleep(2000);
         System.exit(0);
@@ -80,7 +81,10 @@ public class App {
                     break;
                 } else {
                     int time = Integer.valueOf(line.trim());
-                    device.drag(center.getX(), center.getY() - 300, center.getX(), center.getY() - 300, 1, time);
+
+                    int randomX = (int)(400 * Math.random() - 200);
+                    int randomY = (int)(80 * Math.random() - 40);
+                    device.touch(center.getX() + randomX, center.getY() - 300 + randomY, time);
                 }
             }
         } catch (Exception e) {

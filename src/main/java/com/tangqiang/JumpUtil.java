@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.awt.image.BufferedImage;
 
 /**
- * TODO
+ * 工具类
  *
  * @author Tom
  * @version 1.0 2018-01-04 0004 Tom create

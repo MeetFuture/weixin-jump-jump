@@ -1,38 +1,54 @@
 package com.tangqiang;
 
-import junit.framework.Test;
+import com.tangqiang.adb.AdbBackend;
+import com.tangqiang.adb.inter.IAdbBackend;
+import com.tangqiang.adb.inter.IAdbDevice;
+import com.tangqiang.adb.inter.IAdbImage;
+import com.tangqiang.adb.types.KeyCode;
+import junit.framework.Assert;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 /**
- * Unit test for simple App.
+ * Unit test
  */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+public class AppTest extends TestCase {
+    IAdbBackend backend = null;
+    IAdbDevice device = null;
+
+    public AppTest(String testName) {
+        super(testName);
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
+    @Override
+    protected void setUp() throws Exception {
+        backend = new AdbBackend();
+        device = backend.waitForConnection();
     }
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+
+    public void testCapture() {
+        long start = System.currentTimeMillis();
+        String file = "target/tmp/output" + start + ".png";
+        boolean success = device.takeSnapshot(file);
+        Assert.assertTrue(success);
+    }
+
+    /***/
+    public void testCapture1() {
+        long start = System.currentTimeMillis();
+        IAdbImage snapshot = device.takeSnapshotFrame();
+        snapshot.writeToFile("target/tmp/output" + start + ".png", "png");
+    }
+
+    public void testPress() {
+        String result = device.press(KeyCode.HOME);
+        Assert.assertNotNull(result);
+    }
+
+
+    @Override
+    protected void tearDown() throws Exception {
+        device.dispose();
+        backend.shutdown();
     }
 }

@@ -1,12 +1,11 @@
 package com.tangqiang.adb.inter;
 
-import com.tangqiang.adb.AdbManager;
-import com.tangqiang.adb.types.PhysicalButton;
-import com.tangqiang.adb.types.TouchPressType;
+import com.android.ddmlib.IDevice;
+import com.tangqiang.adb.types.KeyCode;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 /**
  * TODO
@@ -16,55 +15,45 @@ import java.util.Map;
  * @date 2018-01-04 0004
  * @copyright Copyright © 2018 Grgbanking All rights reserved.
  */
-
 public interface IAdbDevice {
-    AdbManager getManager();
 
-    void dispose();
+    IDevice device();
+
+    String getProperty(String key);
+
+    String shell(String cmd);
+
+    String shell(String cmd, long timeout);
+
+    boolean installPackage(String path);
+
+    boolean removePackage(String packageName);
+
+    String press(KeyCode keycode);
+
+    String press(KeyCode keycode, boolean longpress);
+
+    String type(String message);
+
+    String touch(int x, int y);
+
+    String touch(int x, int y, long ms);
+
+    void reboot(String into);
+
+    void wake();
 
     IAdbImage takeSnapshotFrame();
 
     boolean takeSnapshot(String localFile);
 
-    void reboot(@Nullable String var1);
+    Future<String> getSystemProperty(String key);
 
-    Collection<String> getPropertyList();
+    void startActivity(String uri, String action, String data, String mimetype, Collection<String> categories, Map<String, Object> extras, String component, int flags);
 
-    String getProperty(String var1);
+    void broadcastIntent(String uri, String action, String data, String mimetype, Collection<String> categories, Map<String, Object> extras, String component, int flags);
 
-    String getSystemProperty(String var1);
+    String drag(int startx, int starty, int endx, int endy, long ms);
 
-    void touch(int var1, int var2, TouchPressType var3);
-
-    void press(String var1, TouchPressType var2);
-
-    void press(PhysicalButton var1, TouchPressType var2);
-
-    void drag(int x1, int y1, int x2, int y2, int var5, long var6);
-
-    void type(String message);
-
-    String shell(String command);
-
-    String shell(String command, long timeout);
-
-    boolean installPackage(String var1);
-
-    boolean removePackage(String var1);
-
-    void startActivity(@Nullable String var1, @Nullable String var2, @Nullable String var3, @Nullable String var4, Collection<String> var5, Map<String, Object> var6, @Nullable String var7, int var8);
-
-    void broadcastIntent(@Nullable String var1, @Nullable String var2, @Nullable String var3, @Nullable String var4, Collection<String> var5, Map<String, Object> var6, @Nullable String var7, int var8);
-
-    Map<String, Object> instrument(String var1, Map<String, Object> var2);
-
-    void wake();
-
-    Collection<String> getViewIdList();
-
-    IAdbView getView(ISelector var1);
-
-    IAdbView getRootView();
-
-    Collection<IAdbView> getViews(IMultiSelector var1);
+    void dispose();
 }
