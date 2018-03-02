@@ -24,11 +24,11 @@ public class JumpUtil {
      */
     private static double scorePercent = 500.0 / 2160.0;
     /**
-     * 跳人 特征颜色
+     * 跳瓶 特征颜色
      */
     private static int[] color = new int[]{ -12635557 };
     /**
-     * 跳 全屏所需时间
+     * 跳 全屏所需时间 毫秒ms
      */
     private static double timeSize = 1700;
 
