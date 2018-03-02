@@ -1,7 +1,7 @@
 package com.tangqiang;
 
-import com.tangqiang.adb.types.Point;
-import com.tangqiang.adb.types.Rect;
+import com.tangqiang.core.types.Point;
+import com.tangqiang.core.types.Rect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,18 +18,19 @@ import java.util.Arrays;
  */
 public class JumpUtil {
     private static Logger logger = LoggerFactory.getLogger(JumpUtil.class);
+
     /**
      * 分数的高度比
      */
     private static double scorePercent = 500.0 / 2160.0;
     /**
-     * 保龄球 特征颜色
+     * 跳人 特征颜色
      */
-    private static int[] color = new int[]{-13421504, -13421246, -13486517, -13224109, -12633773, -12043429, -11780511, -11583384, -11451540, -11385743};
+    private static int[] color = new int[]{ -12635557 };
     /**
-     * 时间距离比
+     * 跳 全屏所需时间
      */
-    private static double timeSizePercent = 1.6 / 1080;
+    private static double timeSize = 1700;
 
 
     /**
@@ -59,15 +60,6 @@ public class JumpUtil {
         return new Point(width / 2, height / 2);
     }
 
-    private static int arrayHas(int[] arr, int data) {
-        for (int i : arr) {
-            if (i == data) {
-                return 1;
-            }
-        }
-        return -1;
-    }
-
     /**
      * 找到下个图形
      */
@@ -79,7 +71,7 @@ public class JumpUtil {
 
         int widthCenter = width / 2;
         int currentX = current.getX();
-        Rect rect = currentX > widthCenter ? new Rect(0, scorePos, widthCenter -  40, heightCenter) : new Rect(widthCenter + 40, scorePos, width, heightCenter);
+        Rect rect = currentX > widthCenter ? new Rect(0, scorePos, widthCenter - 40, heightCenter) : new Rect(widthCenter + 40, scorePos, width, heightCenter);
 
 
         //logger.info("width:" + width + "  height:" + height + "  scorePos:" + scorePos + "  Center:" + heightCenter);
@@ -136,7 +128,7 @@ public class JumpUtil {
      * 计算时间
      */
     public static long time(Point previous, Point next, int width) {
-        double time = (double) Math.abs(next.getX() - previous.getX()) * (double) width * timeSizePercent;
+        double time = (double) Math.abs(next.getX() - previous.getX()) / (double) width * timeSize;
         return (long) time;
     }
 

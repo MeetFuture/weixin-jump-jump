@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.tangqiang</groupId>
-    <artifactId>my-weixin-jump-jump</artifactId>
+    <artifactId>weixin-jump-jump</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>my-weixin-jump-jump</name>
+    <name>weixin-jump-jump</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -49,15 +49,11 @@
             <version>22.0</version>
         </dependency>
         <dependency>
-            <groupId>com.android.tools.ddms</groupId>
-            <artifactId>ddmlib</artifactId>
-            <version>25.3.0</version>
+            <groupId>com.tangqiang</groupId>
+            <artifactId>android-adbutil</artifactId>
+            <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.android.tools</groupId>
-            <artifactId>sdklib</artifactId>
-            <version>25.3.0</version>
-        </dependency>
+
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>

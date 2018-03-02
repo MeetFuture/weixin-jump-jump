@@ -15,4 +15,4 @@
 4. 启动App main
 
 
-![image](https://github.com/MeetFuture/my-weixin-jump-jump/blob/master/tmp/Screen_20180105234426.png?raw=true)
+![image](https://github.com/MeetFuture/weixin-jump-jump/blob/master/tmp/Screen_20180105234426.png?raw=true)
